@@ -11,15 +11,9 @@ and the WordPress unit testing suite.
 
 1. Clone or fork this repo.
 
-2. Put your plugin or theme code in the root of this folder and adjust the 
+2. Put your plugin or theme code in the root of this folder and adjust the
    `services/wordpress/volumes` section of `docker-compose.yml` so that it
    syncs to the appropriate directory.
-
-3. Add `project.test` to `/etc/hosts`, e.g.:
-
-   ```
-   127.0.0.1 localhost project.test
-   ```
 
 
 ## Start environment
@@ -46,13 +40,7 @@ information about starting, stopping, and interacting with your environment.
 
 ## Install WordPress
 
-```sh
-docker-compose run --rm wp-cli install-wp
-```
-
-Log in to `http://project.test/wp-admin/` with `wordpress` / `wordpress`.
-
-Alternatively, you can navigate to `http://project.test/` and manually perform
+Navigate to `http://localhost:80` and manually perform
 the famous five-second install.
 
 
@@ -85,26 +73,28 @@ scaffold.
 
 Note that, in the PHPUnit container, your code is mapped to `/app`.
 
+To set up testing, first run the following command to compose the PHPUnit container.
+
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d
-docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /app/bin/install-wp-tests.sh wordpress_test root '' mysql_phpunit latest true
+```
+
+Then, enter the PHPUnit container with bash by running the following command.
+
+```sh
+docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit bash
+```
+
+Once you've entered the container, run the following command to set up testing with a shell script.
+
+```sh
+/app/bin/install-wp-tests.sh wordpress_test root '' mysql_phpunit latest true
 ```
 
 Now you are ready to run PHPUnit. Repeat this command as necessary:
 
 ```sh
 docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit
-```
-
-
-## Changing the hostname
-
-You can change the hostname from the default `project.test` by adding a `.env`
-file at the project root and defining the `DOCKER_DEV_DOMAIN` environment
-variable:
-
-```
-DOCKER_DEV_DOMAIN=myproject.test
 ```
 
 
