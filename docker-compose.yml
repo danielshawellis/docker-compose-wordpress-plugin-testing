@@ -6,7 +6,6 @@ services:
     ports:
       - "80:80"
     environment:
-      # VIRTUAL_HOST: "${DOCKER_DEV_DOMAIN:-project.test}"
       WORDPRESS_DB_HOST: "mysql"
       WORDPRESS_DB_NAME: "wordpress"
       WORDPRESS_DB_PASSWORD: ""
@@ -17,8 +16,8 @@ services:
       - "front"
       - "back"
     volumes:
-      - "wp:/var/www/html:rw"
-      - ".:/var/www/html/wp-content/plugins/my-plugin:ro"
+      - "./wordpress:/var/www/html:rw"
+      - "./plugin:/var/www/html/wp-content/plugins/my-plugin:ro"
   wp-cli:
     image: "wordpress:cli-${WP_CLI_VERSION:-2.2.0}-php${PHP_VERSION:-7.3}"
     environment:
@@ -29,7 +28,7 @@ services:
     networks:
       - "back"
     volumes:
-      - "wp:/var/www/html:rw"
+      - "./wordpress:/var/www/html:rw"
       - "./bin/install-wp.sh:/usr/local/bin/install-wp:ro"
       - ".:/var/www/html/wp-content/plugins/my-plugin:ro"
   mysql:
@@ -40,20 +39,7 @@ services:
       MYSQL_ROOT_PASSWORD: ""
     networks:
       - "back"
-  # proxy:
-  #   image: "jwilder/nginx-proxy:alpine"
-  #   ports:
-  #     - "80:80"
-  #   networks:
-  #     front:
-  #       aliases:
-  #         - "${DOCKER_DEV_DOMAIN:-project.test}"
-  #   volumes:
-  #     - "/var/run/docker.sock:/tmp/docker.sock:ro"
 
 networks:
   front: {}
   back: {}
-
-volumes:
-  wp: {}
