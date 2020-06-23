@@ -16,7 +16,7 @@ services:
       - "front"
       - "back"
     volumes:
-      - "./wordpress:/var/www/html:rw"
+      - "wp:/var/www/html:rw"
       - "./plugin:/var/www/html/wp-content/plugins/my-plugin:ro"
   wp-cli:
     image: "wordpress:cli-${WP_CLI_VERSION:-2.2.0}-php${PHP_VERSION:-7.3}"
@@ -28,7 +28,7 @@ services:
     networks:
       - "back"
     volumes:
-      - "./wordpress:/var/www/html:rw"
+      - "wp:/var/www/html:rw"
       - "./bin/install-wp.sh:/usr/local/bin/install-wp:ro"
       - ".:/var/www/html/wp-content/plugins/my-plugin:ro"
   mysql:
@@ -43,3 +43,6 @@ services:
 networks:
   front: {}
   back: {}
+
+volumes:
+  wp: {}
