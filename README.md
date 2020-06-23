@@ -91,6 +91,12 @@ Once you've entered the container, run the following command to set up testing w
 /app/bin/install-wp-tests.sh wordpress_test root '' mysql_phpunit latest true
 ```
 
+If working on a Windows machine, you may see an error like `No such file or directory`. This is caused by Windows reformatting the line breaks in the shell script, rendering it unreadable to bash. If this occurs, change to the directory of the `install-wp-test.sh` file and run the following command:
+
+```sh
+dos2unix install-wp-test.sh
+```
+
 Now you are ready to run PHPUnit. Repeat this command as necessary:
 
 ```sh
